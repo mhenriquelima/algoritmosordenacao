@@ -27,7 +27,7 @@ class HashTableChaining:
         atual = self.tabela[index]
         while atual is not None:
             if atual.aluno.rgm == aluno.rgm:
-                return print(f"Aluno com o RGM [{aluno.rgm}] já existe na tabela.")
+                return False  # matrícula duplicada: não insere
             atual = atual.prox
 
         if self.tabela[index] is None:
@@ -35,6 +35,7 @@ class HashTableChaining:
         else:
             novo_node.prox = self.tabela[index]
             self.tabela[index] = novo_node
+        return True
 
     def remove(self, rgm):
         index = self.hash_function(rgm)
