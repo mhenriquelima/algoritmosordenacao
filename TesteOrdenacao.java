@@ -1,6 +1,4 @@
 
-package ed2.projeto.algoritmosordenacao;
-
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
