@@ -1,16 +1,52 @@
 package ed2.projeto.algoritmosordenacao;
 import java.util.Scanner;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
 
 public class Main {
+
+    public static void gerarArquivo(String nomeArquivo, int tamanhoVetor) {
+        int[] vetor = Utils.gerarVetor(tamanhoVetor, tamanhoVetor * 10);
+        try (BufferedWriter bf = new BufferedWriter(new FileWriter(nomeArquivo + ".txt"))) {
+            for (int i = 0; i < vetor.length; i++) {
+                bf.write(String.valueOf(vetor[i]));
+                bf.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao criar o arquivo: " + e.getMessage());
+        }
+    }
+
+    public static int[] lerArquivo(String nomeArquivo) {
+        ArrayList<Integer> lista = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(nomeArquivo + ".txt"))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                lista.add(Integer.parseInt(linha));
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+        }
+        return lista.stream().mapToInt(i -> i).toArray();
+    }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+
+        gerarArquivo("numeros", 100000);
+        int[] vetor = lerArquivo("numeros");
         
         int escolha;
         String entrada;
+        long tempoExecucao = 0;
 
         IAlgoritmoOrdenacao algoritmoOrdenacao;
 
         do {
+            int [] vetorCopia = vetor.clone();
             // Menu
             System.out.println("Escolha o algoritmo de ordenação:");
             System.out.println("1. Bubble Sort");
@@ -62,9 +98,23 @@ public class Main {
             }
             
             System.out.printf("Você escolheu o algoritmo: %s%n", algoritmoOrdenacao.toString());
-            sc.close();
+
+            // Ordenação
+            long tempoInicial = System.currentTimeMillis();
+
+            algoritmoOrdenacao.ordenarVetor(vetorCopia);
+
+            long tempoFinal = System.currentTimeMillis();
+            tempoExecucao = tempoFinal - tempoInicial;
+
+            System.out.printf("Tempo de execução: %d milissegundos%n", tempoExecucao);
+            System.out.println("Vetor inicial: (Caso maior de 100 elementos, apenas os 100 primeiros serão exibidos)");
+            Utils.imprimirVetor(vetor, 100);
+            System.out.println("\nVetor ordenado: (Caso maior de 100 elementos, apenas os 100 primeiros serão exibidos)");
+            Utils.imprimirVetor(vetorCopia, 100);
+            
 
         } while (escolha != 0);
-    
+        sc.close();
     }
 }
