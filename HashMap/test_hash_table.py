@@ -44,7 +44,7 @@ class TesteInsercaoEColisoes(unittest.TestCase):
         # 1, 12, 23 e 34 => todos com h = 1
         for chave in (1, 12, 23, 34):
             self.assertTrue(self.ht.insert(Aluno(f"A{chave}", 20, chave)))
-        self.assertEqual(chaves_da_lista(self.ht, 1), [34, 23, 12, 1])
+        self.assertEqual(chaves_da_lista(self.ht, 1), [1, 12, 23, 34])
         # Nenhum outro endereço foi ocupado
         for i in range(M):
             if i != 1:
@@ -62,7 +62,7 @@ class TesteInsercaoEColisoes(unittest.TestCase):
         # 12345 e 54321 têm h = 3
         self.ht.insert(Aluno("Maria", 20, 12345))
         self.ht.insert(Aluno("Ana", 19, 54321))
-        self.assertEqual(chaves_da_lista(self.ht, 3), [54321, 12345])
+        self.assertEqual(chaves_da_lista(self.ht, 3), [12345, 54321])
 
     def test_uma_chave_em_cada_endereco(self):
         for i in range(M):
@@ -86,7 +86,7 @@ class TesteMatriculaDuplicada(unittest.TestCase):
             self.ht.insert(Aluno(f"A{chave}", 20, chave))
         # 1 está no fim da lista 23 -> 12 -> 1
         self.assertFalse(self.ht.insert(Aluno("Outro", 30, 1)))
-        self.assertEqual(chaves_da_lista(self.ht, 1), [23, 12, 1])
+        self.assertEqual(chaves_da_lista(self.ht, 1), [1, 12, 23])
 
     def test_pode_reinserir_depois_de_remover(self):
         self.ht.insert(Aluno("Ana", 19, 54321))
@@ -103,17 +103,17 @@ class TesteRemocaoEmCadaPosicao(unittest.TestCase):
 
     def test_remover_inicio_da_lista(self):
         self.assertTrue(self.ht.remove(23))
-        self.assertEqual(chaves_da_lista(self.ht, 1), [12, 1])
+        self.assertEqual(chaves_da_lista(self.ht, 1), [1, 12])
         self.assertIsNone(self.ht.search(23))
 
     def test_remover_meio_da_lista(self):
         self.assertTrue(self.ht.remove(12))
-        self.assertEqual(chaves_da_lista(self.ht, 1), [23, 1])
+        self.assertEqual(chaves_da_lista(self.ht, 1), [1, 23])
         self.assertIsNone(self.ht.search(12))
 
     def test_remover_fim_da_lista(self):
         self.assertTrue(self.ht.remove(1))
-        self.assertEqual(chaves_da_lista(self.ht, 1), [23, 12])
+        self.assertEqual(chaves_da_lista(self.ht, 1), [12, 23])
         self.assertIsNone(self.ht.search(1))
 
     def test_remover_todos_esvazia_endereco(self):
@@ -139,7 +139,7 @@ class TesteRemocaoEmCadaPosicao(unittest.TestCase):
     def test_remover_inexistente_nao_altera_tabela(self):
         self.assertFalse(self.ht.remove(34))  # mesmo endereço (1), mas não existe
         self.assertFalse(self.ht.remove(7))   # endereço vazio
-        self.assertEqual(chaves_da_lista(self.ht, 1), [23, 12, 1])
+        self.assertEqual(chaves_da_lista(self.ht, 1), [1, 12, 23])
 
     def test_remover_duas_vezes(self):
         self.assertTrue(self.ht.remove(12))
@@ -222,8 +222,8 @@ class TesteMenu(unittest.TestCase):
         self.assertIn("já existe um aluno com a matrícula 54321", saida)
         self.assertIn("Encontrado no endereço 3: Aluno: Ana", saida)
         self.assertIn("matrícula 99999 não encontrado", saida)
-        self.assertIn("Index 3: [Aluno: Ana, Idade: 19, RGM: 54321] -> "
-                      "[Aluno: Maria, Idade: 20, RGM: 12345] -> None", saida)
+        self.assertIn("Index 3: [Aluno: Maria, Idade: 20, RGM: 12345] -> "
+                      "[Aluno: Ana, Idade: 19, RGM: 54321] -> None", saida)
         self.assertIn("removido do endereço 3", saida)
         self.assertIn("Nada foi removido", saida)
 
