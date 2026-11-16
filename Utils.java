@@ -1,6 +1,4 @@
 
-package ed2.projeto.algoritmosordenacao;
-
 import java.util.Random;
 
 /**
@@ -15,17 +13,18 @@ public class Utils {
 
   }
   
-  // Métodos
-  
-  public static void imprimirVetor(int[] vetor) {
+  // Mï¿½todos
+
+  public static void imprimirVetor(int[] vetor, int limite) {
 	
 	System.out.print( "  Vetor = {" );
 	  
-    for(int i = 0; i < vetor.length; i++) {
+    int tamanhoImpressao = Math.min(vetor.length, limite);
+    for(int i = 0; i < tamanhoImpressao; i++) {
     	
       System.out.print( vetor[i] );
       
-      if( i < ( vetor.length - 1 ) ) {
+      if( i < ( tamanhoImpressao - 1 ) ) {
     	  
         System.out.print( ", " );
     	  
