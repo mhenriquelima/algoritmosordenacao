@@ -25,16 +25,17 @@ class HashTableChaining:
         novo_node = Node(aluno)
 
         atual = self.tabela[index]
+        ultimo = None
         while atual is not None:
             if atual.aluno.rgm == aluno.rgm:
                 return False  # matrícula duplicada: não insere
+            ultimo = atual
             atual = atual.prox
 
-        if self.tabela[index] is None:
+        if ultimo is None:
             self.tabela[index] = novo_node
         else:
-            novo_node.prox = self.tabela[index]
-            self.tabela[index] = novo_node
+            ultimo.prox = novo_node
         return True
 
     def remove(self, rgm):
